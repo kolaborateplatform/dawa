@@ -15,7 +15,7 @@ Dawa is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 Clone the repository and install the necessary dependencies:
 
 ```bash
-git clone https://github.com/your-username/dawa.git
+git clone https://github.com/kolaborateplatform/dawa.git
 cd dawa
 npm install
 ```
