@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import TopBar from '@/components/layout/TopBar';
 import NavBar from './Navbar';
+import Footer from './Footer';
 
 interface LayoutProps {
   children: ReactNode;
@@ -8,7 +9,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       {/* Contact Information Banner */}
       <TopBar />
 
@@ -16,7 +17,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <NavBar />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-6">{children}</main>
+      <main className="px-4 py-6 flex-grow">{children}</main>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
