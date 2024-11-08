@@ -22,7 +22,7 @@ const Button: FC<ButtonProps> = ({
   return (
     <ShadcnButton
       className={cn(
-        'flex items-center justify-center gap-2 px-4 py-2 rounded-md font-medium transition-colors',
+        'flex items-center justify-center gap-2 px-4 py-2 rounded-md transition-colors',
         iconPosition === 'right' ? 'flex-row-reverse' : 'flex-row',
         className,
       )}
