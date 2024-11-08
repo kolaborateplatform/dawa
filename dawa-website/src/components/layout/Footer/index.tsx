@@ -77,7 +77,7 @@ const Footer = () => {
             <FaHeadset className="text-gray-600 text-2xl" />
             <div>
               <p className="text-sm">Have any question?</p>
-              <a href="tel:+256702108552" className="text-orange-500 font-bold">
+              <a href="tel:+256702108552" className="text-primary_1 font-bold">
                 +256 702 108 552
               </a>
             </div>
@@ -109,7 +109,7 @@ const SocialIconLink: React.FC<SocialIconLinkProps> = ({
     aria-label={ariaLabel}
     target="_blank"
     rel="noopener noreferrer"
-    className="p-2 rounded-md text-[#4E4E4E] bg-gray-200 hover:bg-primary_2 hover:text-primary_1 transition-colors duration-200"
+    className="p-2 rounded-md text-[#4E4E4E] opacity-45 hover:opacity-100 bg-gray-200 hover:bg-primary_2 hover:text-primary_1 transition-colors duration-200"
   >
     {icon}
   </a>

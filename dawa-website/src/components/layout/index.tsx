@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import TopBar from '@/components/layout/TopBar';
 import NavBar from './Navbar';
 import Footer from './Footer';
+import Newsletter from './NewsLetter';
 
 interface LayoutProps {
   children: ReactNode;
@@ -17,7 +18,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <NavBar />
 
       {/* Main Content */}
-      <main className="px-4 py-6 flex-grow">{children}</main>
+      <main className="py-6 flex-grow">{children}</main>
+
+      {/* Newsletter Section */}
+      <Newsletter />
 
       {/* Footer */}
       <Footer />

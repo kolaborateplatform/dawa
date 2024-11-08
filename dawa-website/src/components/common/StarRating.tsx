@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import 'rater-js/rater-js.css';
+import React from 'react';
+import { Star } from 'lucide-react';
 
 interface StarRatingProps {
   initialRating?: number;
@@ -7,17 +7,7 @@ interface StarRatingProps {
   onRate?: (rating: number) => void;
   starSize?: number;
   className?: string;
-}
-
-interface RaterOptions {
-  element: HTMLElement;
-  max: number;
-  step: number;
-  rating: number;
-  starSize: number;
-  readOnly: boolean;
-  onRate: (rating: number) => void;
-  rateCallback: (rating: number, done: (rating: number) => void) => void;
+  readOnly?: boolean;
 }
 
 const StarRating: React.FC<StarRatingProps> = ({
@@ -26,38 +16,47 @@ const StarRating: React.FC<StarRatingProps> = ({
   onRate,
   starSize = 24,
   className = '',
+  readOnly = false,
 }) => {
-  const ratingRef = useRef<HTMLDivElement>(null);
+  const [rating, setRating] = React.useState(initialRating);
+  const [hover, setHover] = React.useState<number | null>(null);
 
-  useEffect(() => {
-    import('rater-js').then((module) => {
-      const createRater = module.default as (options: RaterOptions) => void;
-
-      if (ratingRef.current) {
-        createRater({
-          element: ratingRef.current,
-          max: maxRating,
-          step: 1,
-          rating: initialRating,
-          starSize: starSize,
-          readOnly: false,
-          onRate: (rating: number) => {
-            if (onRate) onRate(rating);
-          },
-          rateCallback: (rating, done) => {
-            done(rating);
-            // Apply selected and unselected colors based on rating
-            const stars = ratingRef.current?.querySelectorAll<HTMLElement>('i');
-            stars?.forEach((star, index) => {
-              star.style.color = index < rating ? '#FFA200' : '#D8D8D8';
-            });
-          },
-        });
+  const handleRating = (value: number) => {
+    if (!readOnly) {
+      setRating(value);
+      if (onRate) {
+        onRate(value);
       }
-    });
-  }, [initialRating, maxRating, onRate, starSize]);
+    }
+  };
 
-  return <div ref={ratingRef} className={className} />;
+  return (
+    <div className={`flex items-center gap-0.5 ${className}`}>
+      {[...Array(maxRating)].map((_, index) => {
+        const value = index + 1;
+        const isFilled = (hover ?? rating) >= value;
+
+        return (
+          <button
+            key={index}
+            type="button"
+            onClick={() => handleRating(value)}
+            onMouseEnter={() => !readOnly && setHover(value)}
+            onMouseLeave={() => !readOnly && setHover(null)}
+            className={`${!readOnly && 'cursor-pointer'} p-0.5 transition-colors`}
+            disabled={readOnly}
+          >
+            <Star
+              size={starSize}
+              className={`${
+                isFilled ? 'fill-primary_1 text-primary_1' : 'text-gray-300'
+              } transition-colors`}
+            />
+          </button>
+        );
+      })}
+    </div>
+  );
 };
 
 export default StarRating;
