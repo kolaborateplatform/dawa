@@ -8,20 +8,29 @@ const TopBar = () => {
           {/* Left Section */}
           <div className="flex items-center space-x-2">
             <FaPhoneAlt />
-            <span>+256 702108552</span>
+            <a href="tel:+256702108552" className="hover:underline">
+              +256 702108552
+            </a>
           </div>
 
           {/* Center Section */}
           <div className="flex items-center space-x-2">
             <FaEnvelope />
-            <span>dawaonlinestore@gmail.com</span>
+            <a
+              href="mailto:dawaonlinestore@gmail.com"
+              className="hover:underline"
+            >
+              dawaonlinestore@gmail.com
+            </a>
           </div>
         </div>
 
         {/* Right Section */}
         <div className="flex items-center space-x-2">
           <FaMapMarkerAlt />
-          <span>Store Locations</span>
+          <a href="#" className="hover:underline">
+            Store Locations
+          </a>
         </div>
       </div>
     </div>
