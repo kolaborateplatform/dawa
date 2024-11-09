@@ -50,13 +50,13 @@ const NavBar: React.FC = () => {
       {/* Section 1: Top Nav */}
       <div
         className={`${
-          isSticky
-            ? 'fixed top-0 left-0 right-0 shadow bg-white z-50 transition-transform duration-200'
-            : ''
-        }`}
+          isSticky ? 'fixed top-0 left-0 right-0 z-50 bg-white shadow' : ''
+        } transition-all duration-300 ease-in-out`}
       >
         <div
-          className={`container mx-auto flex items-center justify-between ${isSticky ? 'py-2 lg:py-0' : 'py-2 px-4'} gap-4`}
+          className={`container mx-auto flex items-center justify-between ${
+            isSticky ? 'py-1 lg:py-0 h-16' : 'py-2 h-20'
+          } px-4 transition-all duration-300 ease-in-out gap-4`}
         >
           {/* Menu Trigger for Mobile */}
           <div className="flex items-center gap-4 lg:hidden">
@@ -106,7 +106,11 @@ const NavBar: React.FC = () => {
           {/* Logo for Larger Screens */}
           <div className="hidden lg:flex items-center">
             <Link href="/">
-              <Logo className={`w-auto ${isSticky ? 'h-16' : 'h-24'} -ml-8`} />
+              <Logo
+                className={`w-auto transition-all duration-300 ease-in-out ${
+                  isSticky ? 'h-16' : 'h-24'
+                } -ml-8`}
+              />
             </Link>
           </div>
 
