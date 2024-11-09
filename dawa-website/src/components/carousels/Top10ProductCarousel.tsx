@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import StarRating from '../common/StarRating';
 import Image from 'next/image';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -76,23 +76,23 @@ const products: Product[] = [
 
 const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState<{
-    width?: number;
-    height?: number;
-  }>({
-    width: undefined,
-    height: undefined,
-  });
+    width: number | undefined;
+    height: number | undefined;
+  }>({ width: undefined, height: undefined });
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
     const handleResize = () => {
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
       });
     };
+
     window.addEventListener('resize', handleResize);
-    handleResize(); // Initialize
+    handleResize();
+
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -101,79 +101,94 @@ const useWindowSize = () => {
 
 const Top10ProductCarousel: React.FC = () => {
   const size = useWindowSize();
-  const [itemsToShow, setItemsToShow] = useState(3); // Default for Desktop
+  const [itemsToShow, setItemsToShow] = useState(3);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Update itemsToShow based on window width
+  const itemWidth = 348.35; // Card width in pixels
+  const itemHeight = 400; // Card height in pixels
+  const itemMarginRight = 16; // Margin-right between items (in pixels)
+
+  // Adjust itemsToShow based on screen size
   useEffect(() => {
-    if (size.width !== undefined) {
+    if (size.width) {
       if (size.width < 640) {
-        setItemsToShow(1); // Mobile
+        setItemsToShow(1); // Mobile view
       } else if (size.width < 1024) {
-        setItemsToShow(2); // Tablet
+        setItemsToShow(2); // Tablet view
       } else {
-        setItemsToShow(3); // Desktop
+        setItemsToShow(3); // Desktop view
       }
     }
   }, [size.width]);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Calculate the maximum index to prevent partial visibility
+  // Calculate the maximum index based on items to show
   const maxIndex = Math.max(products.length - itemsToShow, 0);
 
-  // Adjust currentIndex if itemsToShow changes and currentIndex is out of bounds
+  // Ensure currentIndex is within bounds when itemsToShow changes
   useEffect(() => {
-    if (currentIndex > maxIndex) {
-      setCurrentIndex(maxIndex);
-    }
-  }, [maxIndex, currentIndex]);
+    setCurrentIndex((prevIndex) => {
+      return Math.min(prevIndex, maxIndex);
+    });
+  }, [itemsToShow, maxIndex]);
 
+  // Auto-scroll functionality
+  useEffect(() => {
+    if (autoScrollRef.current) {
+      clearInterval(autoScrollRef.current);
+    }
+
+    // Set up a new interval
+    autoScrollRef.current = setInterval(() => {
+      setCurrentIndex((prevIndex) => {
+        if (prevIndex >= maxIndex) {
+          return 0;
+        } else {
+          return prevIndex + 1;
+        }
+      });
+    }, 3000);
+
+    return () => {
+      if (autoScrollRef.current) {
+        clearInterval(autoScrollRef.current);
+      }
+    };
+  }, [itemsToShow, maxIndex]);
+
+  // Increment the current index by one item per click, ensuring it loops back
   const handleNext = useCallback(() => {
-    setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, maxIndex));
+    setCurrentIndex((prevIndex) => (prevIndex >= maxIndex ? 0 : prevIndex + 1));
   }, [maxIndex]);
 
+  // Decrement the current index by one item per click, ensuring it loops back
   const handlePrev = useCallback(() => {
-    setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-  }, []);
+    setCurrentIndex((prevIndex) => (prevIndex <= 0 ? maxIndex : prevIndex - 1));
+  }, [maxIndex]);
 
-  const handleProductClick = (id: number) => {
-    console.log(`Product selected with ID: ${id}`);
-    // Handle further actions with the selected product ID here
-  };
-
-  // Calculate the percentage to translate based on currentIndex
-  const translatePercentage = (currentIndex * 100) / itemsToShow;
+  // Calculate the translation in pixels
+  const translateX = -(currentIndex * (itemWidth + itemMarginRight));
 
   return (
-    <div className="w-full bg-gray-100 py-8">
-      <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start mx-auto px-4">
+    <div className="w-full bg-gray-100 py-12">
+      <div className="ml-3 lg:ml-[12%] flex flex-col lg:flex-row items-center">
         {/* Left Section: Title and Navigation */}
-        <div className="w-full lg:w-1/4  lg:ml-[13%] flex flex-col gap-4 justify-between mb-6 lg:mb-0">
-          <h2 className="text-2xl lg:text-3xl font-semibold mb-4 text-center lg:text-left">
+        <div className="w-full lg:w-1/4 flex flex-col gap-4 justify-between mb-6 lg:mb-0">
+          <h2 className="text-2xl lg:text-3xl lg:max-w-[250px] lg:leading-10 font-semibold mb-4 text-center lg:text-left">
             Top 10 Selected Products Of The Week
           </h2>
           <div className="flex justify-center lg:justify-start items-center space-x-2">
             <button
               onClick={handlePrev}
-              disabled={currentIndex === 0}
               aria-label="Previous Products"
-              className={`p-2 rounded-full border border-gray-300 disabled:border-gray-200 shadow ${
-                currentIndex === 0
-                  ? 'disabled:text-gray-200 cursor-not-allowed'
-                  : 'border-gray-600 text-gray-600 hover:bg-gray-300'
-              } focus:outline-none transition`}
+              className="p-2 rounded-full border border-gray-300 shadow text-gray-600 hover:bg-gray-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FaChevronLeft />
             </button>
             <button
               onClick={handleNext}
-              disabled={currentIndex >= maxIndex}
               aria-label="Next Products"
-              className={`p-2 rounded-full border border-gray-300 shadow ${
-                currentIndex > maxIndex
-                  ? 'border-gray-200 disabled:text-gray-200 cursor-not-allowed'
-                  : 'border-gray-600 text-gray-600 hover:bg-gray-300'
-              } focus:outline-none transition`}
+              className="p-2 rounded-full border border-gray-300 shadow text-gray-600 hover:bg-gray-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FaChevronRight />
             </button>
@@ -181,40 +196,49 @@ const Top10ProductCarousel: React.FC = () => {
         </div>
 
         {/* Right Section: Carousel */}
-        <div className="w-full lg:w-3/4 overflow-hidden">
+        <div className="w-full lg:w-3/4 pb-1 overflow-hidden relative">
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{
-              transform: `translateX(-${(currentIndex * 100) / itemsToShow}%)`,
-              width: `${(products.length * 100) / itemsToShow}%`,
+              transform: `translateX(${translateX}px)`,
+              width: `${products.length * (itemWidth + itemMarginRight)}px`,
             }}
           >
             {products.map((product) => (
               <div
                 key={product.id}
-                onClick={() => handleProductClick(product.id)}
-                className="p-4 w-full max-w-[348px] flex-shrink-0 cursor-pointer"
+                className="flex-shrink-0 cursor-pointer"
                 style={{
-                  width: `${100 / products.length}%`,
+                  width: `${itemWidth}px`,
+                  height: `${itemHeight}px`,
+                  marginRight: `${itemMarginRight}px`,
                 }}
               >
-                <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full">
-                  <div className="relative w-full h-48 sm:h-56 md:h-64">
+                <div
+                  onClick={() => console.log('clicked', product.id)}
+                  className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col h-full"
+                >
+                  <div className="relative w-full h-3/4">
                     <Image
                       src={product.imageUrl}
                       alt={product.name}
                       layout="fill"
                       objectFit="cover"
-                      className="rounded-t-lg"
+                      className="rounded-t-2xl"
                       priority={false}
+                      loading="lazy"
                     />
                   </div>
                   <div className="p-4 flex flex-col justify-between flex-grow">
                     <div>
-                      <h3 className="text-lg font-semibold">{product.name}</h3>
+                      <h3 className="text-lg font-semibold truncate">
+                        {product.name}
+                      </h3>
                       <p className="text-sm text-gray-500">
                         {product.sold} sold
                       </p>
+                    </div>
+                    <div className="flex flex-col items-start mt-4">
                       <p className="text-primary_1 font-bold text-lg mt-2">
                         {product.price}
                         {product.originalPrice && (
@@ -223,8 +247,6 @@ const Top10ProductCarousel: React.FC = () => {
                           </span>
                         )}
                       </p>
-                    </div>
-                    <div className="flex items-center mt-4">
                       <StarRating
                         initialRating={product.rating}
                         maxRating={4}
