@@ -1,8 +1,34 @@
 'use client';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
+
+// Reusable useWindowSize Hook
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState<{
+    width: number | undefined;
+    height: number | undefined;
+  }>({ width: undefined, height: undefined });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial setting
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowSize;
+};
 
 interface Product {
   id: number;
@@ -30,7 +56,7 @@ const products: Product[] = [
     stockLeft: 24,
     totalStock: 100,
     imageUrl:
-      'https://images.unsplash.com/photo-1612801799890-4ba4760b6590?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8WGJveCUyMFdoaXRlJTIwSm95c3RpY2t8ZW58MHx8MHx8fDA%3D',
+      'https://images.unsplash.com/photo-1612801799890-4ba4760b6590?w=500&auto=format&fit=crop&q=60',
   },
   {
     id: 3,
@@ -39,7 +65,7 @@ const products: Product[] = [
     stockLeft: 15,
     totalStock: 100,
     imageUrl:
-      'https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8U21hcnQlMjBXYXRjaCUyMFNlcmllcyUyMDZ8ZW58MHx8MHx8fDA%3D',
+      'https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?w=500&auto=format&fit=crop&q=60',
   },
   {
     id: 4,
@@ -48,40 +74,50 @@ const products: Product[] = [
     stockLeft: 30,
     totalStock: 100,
     imageUrl:
-      'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8V2lyZWxlc3MlMjBFYXJidWRzJTIwUHJvfGVufDB8fDB8fHww',
+      'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&auto=format&fit=crop&q=60',
   },
 ];
 
 const FlashSale: React.FC = () => {
+  const size = useWindowSize();
+  const [itemsPerView, setItemsPerView] = useState(1);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(5 * 60 * 60);
-  const [itemsPerView, setItemsPerView] = useState(2);
+  const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Update itemsPerView based on window width
+  // Fixed card dimensions
+  const CARD_WIDTH = 448; // Fixed card width in pixels
+  const CARD_HEIGHT = 150; // Fixed card height in pixels
+  const CARD_MARGIN = 16; // Gap between cards
+
+  // Adjust itemsPerView based on screen size and fixed card width
   useEffect(() => {
-    const updateItemsPerView = () => {
-      const width = window.innerWidth;
-      setItemsPerView(width >= 1024 ? 2 : 1);
-    };
-
-    updateItemsPerView(); // Initial setting
-    window.addEventListener('resize', updateItemsPerView);
-
-    return () => window.removeEventListener('resize', updateItemsPerView);
-  }, []);
-
-  // Group products into slides based on itemsPerView
-  const slides = useMemo(() => {
-    const groupedSlides: Product[][] = [];
-    for (let i = 0; i < products.length; i += itemsPerView) {
-      groupedSlides.push(products.slice(i, i + itemsPerView));
+    if (size.width) {
+      setItemsPerView(Math.floor(size.width / (CARD_WIDTH + CARD_MARGIN)));
     }
-    return groupedSlides;
-  }, [itemsPerView]);
+  }, [size.width]);
 
-  const maxIndex = slides.length - 1;
+  // Auto-scroll functionality
+  useEffect(() => {
+    if (autoScrollRef.current) {
+      clearInterval(autoScrollRef.current);
+    }
 
-  // Countdown timer
+    autoScrollRef.current = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
+    }, 3000); // 3 seconds
+
+    return () => {
+      if (autoScrollRef.current) {
+        clearInterval(autoScrollRef.current);
+      }
+    };
+  }, [products.length]);
+
+  // Calculate translation based on the current index
+  const translateX = -currentIndex * (CARD_WIDTH + CARD_MARGIN);
+
+  // Countdown timer (e.g., 5 hours)
+  const [timeLeft, setTimeLeft] = useState(5 * 60 * 60);
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
@@ -89,113 +125,102 @@ const FlashSale: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Auto-scroll carousel every 5 seconds
-  useEffect(() => {
-    const carouselInterval = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex < maxIndex ? prevIndex + 1 : 0,
-      );
-    }, 5000); // 5 seconds
-    return () => clearInterval(carouselInterval);
-  }, [maxIndex]);
-
-  // Format time from seconds to HH : MM : SS
+  // Format time as HH : MM : SS
   const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600)
+    const hrs = Math.floor(seconds / 3600)
       .toString()
       .padStart(2, '0');
-    const minutes = Math.floor((seconds % 3600) / 60)
+    const mins = Math.floor((seconds % 3600) / 60)
       .toString()
       .padStart(2, '0');
     const secs = (seconds % 60).toString().padStart(2, '0');
-    return `${hours} : ${minutes} : ${secs}`;
+    return `${hrs} : ${mins} : ${secs}`;
   };
 
   return (
-    <div className="w-full py-6 container mx-auto bg-primary_1 rounded-xl relative">
-      <div className="flex flex-col lg:flex-row items-center px-6">
+    <div className="w-full py-6 container mx-auto bg-primary_1 md:rounded-xl relative overflow-hidden">
+      <div className="px-4 flex flex-col lg:flex-row items-center">
         {/* Left Section with Countdown */}
-        <div className="lg:w-4/12 w-full text-white relative z-10 lg:pr-4 text-center lg:text-left">
+        <div className="lg:w-4/12 w-full flex flex-col items-start gap-4  text-white text-center lg:text-left lg:mb-0 relative z-10">
           <h2 className="text-3xl font-bold">Flash Sale</h2>
-          <p className="text-sm my-2">
+          <p className="text-sm">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore
           </p>
-          <div className="text-4xl font-bold mt-4">{formatTime(timeLeft)}</div>
+          <div className="text-4xl font-bold">{formatTime(timeLeft)}</div>
         </div>
 
         {/* Right Section with Carousel */}
-        <div className="lg:w-8/12 w-full mt-6 lg:mt-0 relative z-10 flex flex-col items-start">
-          {/* Carousel Container with Overflow Hidden */}
-          <div className="overflow-hidden w-full">
-            {/* Carousel Inner */}
+        <div className="lg:w-8/12 w-full py-1 relative z-10">
+          {/* Carousel Container with Fixed Width */}
+          <div
+            className="flex overflow-hidden"
+            style={{
+              maxWidth: itemsPerView * (CARD_WIDTH + CARD_MARGIN),
+            }}
+          >
+            {/* Carousel Inner with Dynamic TranslateX */}
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`,
-                width: `${slides.length * 100}%`,
+                transform: `translateX(${translateX}px)`,
+                gap: `${CARD_MARGIN}px`,
               }}
             >
-              {slides.map((slide, slideIndex) => (
+              {products.map((product) => (
                 <div
-                  key={slideIndex}
-                  className="flex-shrink-0 flex gap-4 justify-center"
-                  style={{ width: `${100 / itemsPerView}%` }}
+                  key={product.id}
+                  className="bg-white rounded-xl p-4 shadow-lg flex items-center"
+                  style={{
+                    width: `${CARD_WIDTH}px`,
+                    height: `${CARD_HEIGHT}px`,
+                    flexShrink: 0,
+                  }}
                 >
-                  {slide.map((product) => (
-                    <div
-                      key={product.id}
-                      className="w-[420px] h-[150px] bg-white rounded-lg p-4 shadow-lg flex items-center"
-                    >
-                      <div className="relative w-[117px] h-full rounded-xl overflow-hidden">
-                        <Image
-                          src={product.imageUrl}
-                          alt={product.name}
-                          fill
-                          className="object-cover"
-                          sizes="117px"
-                          quality={100}
-                        />
+                  <div className="relative w-28 h-full rounded-xl overflow-hidden flex-shrink-0">
+                    <Image
+                      src={product.imageUrl}
+                      alt={product.name}
+                      fill
+                      className="object-cover"
+                      sizes="112px"
+                      priority={false}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="flex-1 flex flex-col justify-between ml-4">
+                    <h3 className="font-semibold text-black text-sm lg:text-base">
+                      {product.name}
+                    </h3>
+                    <div>
+                      <div className="flex justify-between items-center">
+                        <p className="text-primary_1 font-bold text-sm lg:text-base">
+                          {product.price}
+                        </p>
+                        <span className="text-xs text-gray-400">
+                          {product.stockLeft} left
+                        </span>
                       </div>
-                      <div className="flex-1 flex flex-col h-full py-2 justify-between ml-4">
-                        <h3 className="font-semibold text-black text-wrap">
-                          {product.name}
-                        </h3>
-                        <div>
-                          <div className="w-full flex justify-between items-center">
-                            <p className="text-primary_1 font-bold">
-                              <p></p>
-                              {product.price}
-                            </p>
-
-                            <span className="text-xs text-gray-400">
-                              {product.stockLeft} left
-                            </span>
-                          </div>
-                          <Progress
-                            value={
-                              (product.stockLeft / product.totalStock) * 100
-                            }
-                            className="mt-1 bg-primary_2"
-                            indicatorClassName="bg-primary_1"
-                          />
-                        </div>
-                      </div>
+                      <Progress
+                        value={(product.stockLeft / product.totalStock) * 100}
+                        className="mt-1 bg-gray-200"
+                        indicatorClassName="bg-primary_1"
+                      />
                     </div>
-                  ))}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Dot Indicators */}
-          <div className="mt-4 ml-7 flex space-x-2">
-            {slides.map((_, index) => (
+          <div className="flex justify-start mt-4 ml-4 space-x-2">
+            {products.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? 'w-6 bg-white' : 'w-2 bg-gray-400'
+                  index === currentIndex ? 'w-6 bg-white' : 'w-2 bg-gray-400/45'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
@@ -203,13 +228,13 @@ const FlashSale: React.FC = () => {
           </div>
         </div>
 
-        {/* Background Image Overlay */}
-        <div className="absolute inset-0 bg-[url('/path-to-background-image.jpg')] bg-cover opacity-20 lg:opacity-30"></div>
+        {/* Background Overlay (Optional) */}
+        <div className="absolute inset-0 bg-[url('/path-to-background-image.jpg')] bg-cover opacity-20 lg:opacity-30 pointer-events-none"></div>
 
         {/* View More Link */}
         <Link
-          href={'#'}
-          className="absolute bottom-4 right-6 text-white text-sm cursor-pointer underline"
+          href="#"
+          className="absolute bottom-4 right-6 text-white text-sm underline z-10"
         >
           View more
         </Link>
