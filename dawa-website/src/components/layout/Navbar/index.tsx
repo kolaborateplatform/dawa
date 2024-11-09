@@ -70,9 +70,7 @@ const NavBar: React.FC = () => {
                 <SheetHeader>
                   <SheetTitle>
                     <Link href="/" className="flex items-center mb-1">
-                      <Logo
-                        className={`w-auto ${isSticky ? 'h-8' : 'h-12'} -ml-6`}
-                      />
+                      <Logo className={`w-auto h-12 -ml-6`} />
                     </Link>
                   </SheetTitle>
                 </SheetHeader>
@@ -108,7 +106,7 @@ const NavBar: React.FC = () => {
           {/* Logo for Larger Screens */}
           <div className="hidden lg:flex items-center">
             <Link href="/">
-              <Logo className="w-auto h-24 -ml-8" />
+              <Logo className={`w-auto ${isSticky ? 'h-16' : 'h-24'} -ml-8`} />
             </Link>
           </div>
 
@@ -128,15 +126,20 @@ const NavBar: React.FC = () => {
 
           {/* Icons and Buttons */}
           <div className="flex items-center gap-8">
-            <FiGrid className="hidden lg:block text-xl text-gray-700 cursor-pointer" />
+            <Link href="/categories">
+              <FiGrid className="hidden lg:block text-xl text-gray-700 cursor-pointer" />
+            </Link>
 
             {/* Favorites Icon with Badge for Large Screens */}
-            <div className="relative hidden lg:flex items-center">
+            <Link
+              href="/favorites"
+              className="relative hidden lg:flex items-center"
+            >
               <FaHeart className="text-xl text-gray-700 cursor-pointer" />
               <span className="absolute -top-1.5 -right-2 bg-primary_1 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">
                 12
               </span>
-            </div>
+            </Link>
 
             {/* Login and Sign Up Buttons */}
             <div className="hidden md:flex items-center gap-3">
