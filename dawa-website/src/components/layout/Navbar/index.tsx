@@ -22,7 +22,7 @@ const NavBar: React.FC = () => {
   // Track scroll position to set sticky state
   useEffect(() => {
     const handleScroll = () => {
-      setIsSticky(window.scrollY > 50); // Adjust the threshold as needed
+      setIsSticky(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -30,7 +30,7 @@ const NavBar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { href: '/categories/all', label: 'All Categories' },
+    { href: '/categories', label: 'All Categories' },
     { href: '/categories/accessories', label: 'Accessories' },
     { href: '/categories/smartphone', label: 'Smartphone' },
     { href: '/categories/computer', label: 'Computer' },
@@ -51,7 +51,7 @@ const NavBar: React.FC = () => {
       <div
         className={`${
           isSticky
-            ? 'fixed top-0 left-0 right-0 shadow bg-white z-50 transition-transform duration-300'
+            ? 'fixed top-0 left-0 right-0 shadow bg-white z-50 transition-transform duration-200'
             : ''
         }`}
       >

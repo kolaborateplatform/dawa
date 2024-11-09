@@ -11,7 +11,7 @@ import RecentlyViewedCarousel from '@/components/carousels/RecentlyViewedCarouse
 const HomePage = () => {
   return (
     <div className="flex flex-col gap-12">
-      <section>
+      <section className="w-full h-auto overflow-hidden">
         <Highlight_Carousel />
       </section>
       <section className="container mx-auto px-4">
