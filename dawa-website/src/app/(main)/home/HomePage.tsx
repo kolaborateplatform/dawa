@@ -5,6 +5,8 @@ import Top10ProductCarousel from '@/components/carousels/Top10ProductCarousel';
 import BestDeals from '@/components/product/BestDeals';
 import PopularSearchCarousel from '@/components/carousels/PopularSearchCarousel';
 import FlashSale from '@/components/product/FlashSale';
+import HotSalesCarousel from '@/components/carousels/HotSalesCarousel';
+import RecentlyViewedCarousel from '@/components/carousels/RecentlyViewedCarousel';
 
 const HomePage = () => {
   return (
@@ -23,6 +25,12 @@ const HomePage = () => {
       </section>
       <section>
         <FlashSale />
+      </section>
+      <section>
+        <HotSalesCarousel />
+      </section>
+      <section>
+        <RecentlyViewedCarousel />
       </section>
     </div>
   );

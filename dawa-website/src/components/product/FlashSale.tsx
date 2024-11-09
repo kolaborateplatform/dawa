@@ -188,7 +188,7 @@ const FlashSale: React.FC = () => {
                       loading="lazy"
                     />
                   </div>
-                  <div className="flex-1 flex flex-col justify-between ml-4">
+                  <div className="flex-1 flex flex-col justify-between h-full py-2 ml-4">
                     <h3 className="font-semibold text-black text-sm lg:text-base">
                       {product.name}
                     </h3>
@@ -203,7 +203,7 @@ const FlashSale: React.FC = () => {
                       </div>
                       <Progress
                         value={(product.stockLeft / product.totalStock) * 100}
-                        className="mt-1 bg-gray-200"
+                        className="mt-1 bg-primary_2"
                         indicatorClassName="bg-primary_1"
                       />
                     </div>
