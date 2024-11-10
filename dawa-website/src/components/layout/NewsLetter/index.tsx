@@ -3,10 +3,14 @@ import EnvelopIcons from '@public/assets/icons/envelops.svg';
 import CircleElements from '@public/assets/icons/circleElement.svg';
 import Button from '../../common/Button';
 
-const Newsletter = () => {
+const Newsletter = ({ container = false }: { container?: boolean }) => {
   return (
-    <section className="bg-primary_1 py-12 relative overflow-hidden">
-      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-4 md:px-8 lg:px-16 space-y-4 md:space-y-0">
+    <section
+      className={`bg-primary_1 py-12 relative overflow-hidden ${container ? 'rounded-2xl container mx-auto' : ''}`}
+    >
+      <div
+        className={`${container ? '' : 'container mx-auto'} flex flex-col md:flex-row items-center justify-between px-4 md:px-8 lg:px-16 space-y-4 md:space-y-0`}
+      >
         {/* Left Section */}
         <div className="flex items-start space-x-4 text-white md:w-1/2 relative">
           <EnvelopIcons className="w-64 h-2w-64" />

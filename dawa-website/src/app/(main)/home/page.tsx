@@ -4,7 +4,7 @@ import Layout from '@/components/layout';
 
 const page = () => {
   return (
-    <Layout>
+    <Layout newsletterProps={{ container: false }}>
       <HomePage />
     </Layout>
   );

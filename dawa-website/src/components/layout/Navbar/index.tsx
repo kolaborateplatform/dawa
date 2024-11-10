@@ -147,12 +147,12 @@ const NavBar: React.FC = () => {
 
             {/* Login and Sign Up Buttons */}
             <div className="hidden md:flex items-center gap-3">
-              <Link href="/login" passHref>
+              <Link href="/account" passHref>
                 <Button className="bg-gray-100 text-gray-700 hover:bg-gray-200 px-4 py-2 font-bold h-10 text-xs shadow-none">
                   LOGIN
                 </Button>
               </Link>
-              <Link href="/signup" passHref>
+              <Link href="/account" passHref>
                 <Button className="bg-primary_1 hover:bg-primary_1 text-white px-4 py-2 font-bold h-10 text-xs">
                   SIGN UP
                 </Button>

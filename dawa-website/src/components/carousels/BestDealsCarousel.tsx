@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import StarRating from '../common/StarRating';
 
@@ -39,60 +39,62 @@ const products = [
     rating: 4,
     reviews: 20,
   },
-  {
-    id: 1,
-    name: 'Fitness and Activity Tracker',
-    price: 'UGX32,000',
-    imageUrl:
-      'https://images.unsplash.com/photo-1654195131868-cac1d8429d86?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Rml0bmVzcyUyMGFuZCUyMEFjdGl2aXR5JTIwVHJhY2tlcnxlbnwwfHwwfHx8MA%3D%3D',
-    rating: 3,
-    reviews: 12,
-  },
-  {
-    id: 2,
-    name: 'Xbox White Joystick',
-    price: 'UGX102,000',
-    imageUrl:
-      'https://images.unsplash.com/photo-1612801799890-4ba4760b6590?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8WGJveCUyMFdoaXRlJTIwSm95c3RpY2t8ZW58MHx8MHx8fDA%3D',
-    rating: 4,
-    reviews: 18,
-  },
-  {
-    id: 3,
-    name: 'Super Boost Headphones',
-    price: 'UGX32,000',
-    imageUrl:
-      'https://images.unsplash.com/photo-1593697909822-5d9da12b4680?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fFN1cGVyJTIwQm9vc3QlMjBIZWFkcGhvbmVzfGVufDB8fDB8fHww',
-    rating: 3,
-    reviews: 10,
-  },
-  {
-    id: 4,
-    name: 'Ice White Airpods',
-    price: 'UGX1,200,000',
-    imageUrl:
-      'https://images.unsplash.com/photo-1556607173-eca49c3c4f47?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8V2hpdGUlMjBBaXJwb2RzfGVufDB8fDB8fHww',
-    rating: 4,
-    reviews: 20,
-  },
 ];
 
 const BestDealsCarousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardWidth = 273;
   const cardMargin = 36;
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleDotClick = (index: number) => {
     setCurrentIndex(index);
+    resetTimer();
   };
 
+  const resetTimer = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    startTimer();
+  };
+
+  const startTimer = () => {
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === products.length - 1 ? 0 : prevIndex + 1,
+      );
+    }, 3000); // Change slide every 3 seconds
+  };
+
+  useEffect(() => {
+    startTimer();
+
+    // Clean up on unmount
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div className="relative w-full overflow-hidden py-8">
+    <div
+      className="relative w-full overflow-hidden py-8"
+      onMouseEnter={() => {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+      }}
+      onMouseLeave={() => {
+        startTimer();
+      }}
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Best Offer in Laptops</h2>
         {/* Carousel Indicators */}
         <div className="flex items-center space-x-2">
-          {Array.from({ length: products.length }).map((_, index) => (
+          {products.map((_, index) => (
             <button
               key={index}
               onClick={() => handleDotClick(index)}
@@ -109,16 +111,16 @@ const BestDealsCarousel: React.FC = () => {
           transform: `translateX(-${currentIndex * (cardWidth + cardMargin)}px)`,
         }}
       >
-        {products.map((product) => (
+        {products.map((product, index) => (
           <div
-            key={product.id}
+            key={`${product.id}-${index}`} // Ensure unique key if IDs are duplicated
             onClick={() => {
               // TODO: Handle product click
             }}
             style={{
               marginRight: cardMargin,
             }}
-            className=" flex items-center px-2 py-4 w-[273px] sm:mx-0 cursor-pointer  transform  transition duration-300 ease-in-out"
+            className="flex items-center px-2 py-4 w-[273px] sm:mx-0 cursor-pointer transform transition duration-300 ease-in-out"
           >
             {/* Product Image */}
             <div className="w-[80px] h-[80px] sm:w-[117px] sm:h-[117px] md:w-[120px] md:h-[120px] lg:w-[117px] lg:h-[139px] relative flex-shrink-0">

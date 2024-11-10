@@ -6,9 +6,12 @@ import Newsletter from './NewsLetter';
 
 interface LayoutProps {
   children: ReactNode;
+  newsletterProps?: {
+    container?: boolean;
+  };
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, newsletterProps }) => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Contact Information Banner */}
@@ -21,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <main className="py-6 flex-grow">{children}</main>
 
       {/* Newsletter Section */}
-      <Newsletter />
+      {newsletterProps && <Newsletter {...newsletterProps} />}
 
       {/* Footer */}
       <Footer />

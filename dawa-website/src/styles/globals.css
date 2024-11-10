@@ -8,7 +8,12 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: #fefefe;
+  background: linear-gradient(
+    to bottom,
+    rgb(243, 244, 246),
+    rgb(243, 244, 246) 5%,
+    white 20%
+  );
   overflow-x: hidden;
 }
 

@@ -7,7 +7,7 @@ const BannerSection = () => {
   return (
     <div className="relative flex items-center rounded-2xl overflow-hidden h-72">
       {/* Text and Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-gray-100 via-gray-100 to-transparent z-10 flex items-center p-8 sm:p-12">
+      <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-transparent z-10 flex items-center p-8 sm:p-12">
         <div className="w-2/3 sm:w-1/2 flex flex-col gap-1 lg:gap-4">
           <h3 className="text-sm font-semibold text-gray-400 uppercase">
             Most Viewed Category

@@ -4,5 +4,5 @@ export default function CategoryLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <Layout newsletterProps={{ container: false }}>{children}</Layout>;
+  return <Layout newsletterProps={{ container: true }}>{children}</Layout>;
 }

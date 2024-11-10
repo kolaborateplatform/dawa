@@ -1,7 +1,8 @@
 import React from 'react';
+import AccountPage from './AccountPage';
 
 const page = () => {
-  return <div>page</div>;
+  return <AccountPage />;
 };
 
 export default page;

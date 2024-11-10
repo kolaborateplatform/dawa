@@ -88,7 +88,7 @@ const Sidebar: React.FC<SidebarProps> = ({ height = '500px' }) => {
             <div
               className={`flex items-center justify-between font-semibold cursor-pointer transition-colors duration-200 ${
                 activeCategory === category.name
-                  ? 'text-orange-500'
+                  ? 'text-primary_1'
                   : 'text-gray-900'
               }`}
               onClick={() => toggleCategory(category.name)}
