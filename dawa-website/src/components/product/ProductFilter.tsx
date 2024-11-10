@@ -109,7 +109,7 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
         <select
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          className="w-full p-3 text-gray-500 font-medium border border-gray-200 rounded-md"
+          className="w-full p-3 bg-white text-gray-500 font-medium border border-gray-200 rounded-md"
           aria-label="Choose Location"
         >
           <option value="">Choose Location</option>
@@ -118,7 +118,6 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
           <option value="Mbarara">Mbarara</option>
           <option value="Jinja">Jinja</option>
           <option value="Fort Portal">Fort Portal</option>
-          {/* Add more locations as needed */}
         </select>
       </div>
 

@@ -3,6 +3,7 @@ import TopBar from '@/components/layout/TopBar';
 import NavBar from './Navbar';
 import Footer from './Footer';
 import Newsletter from './NewsLetter';
+import ScrollToTopButton from '../common/ScrollToTopButton';
 
 interface LayoutProps {
   children: ReactNode;
@@ -25,6 +26,9 @@ const Layout: React.FC<LayoutProps> = ({ children, newsletterProps }) => {
 
       {/* Newsletter Section */}
       {newsletterProps && <Newsletter {...newsletterProps} />}
+
+      {/* Scroll to Top Button */}
+      <ScrollToTopButton />
 
       {/* Footer */}
       <Footer />
