@@ -1,10 +1,12 @@
 // components/product/ProductFilter.tsx
 'use client';
 import React, { useState } from 'react';
+import { FaCheckCircle, FaMinus, FaPlus } from 'react-icons/fa';
 import { Range } from 'react-range';
-import { FaCheckCircle, FaPlus, FaMinus } from 'react-icons/fa';
-import { Button } from '../ui/button';
+
 import { formatPrice } from '@/lib/utils';
+
+import { Button } from '../ui/button';
 
 interface ProductFilterProps {
   priceRange: [number, number];
@@ -19,8 +21,6 @@ interface ProductFilterProps {
 
 const MIN_PRICE = 0;
 const MAX_PRICE = 100_000_000; // 100,000,000 UGX (100 million UGX)
-const DEFAULT_MIN = 500_000; // 500,000 UGX
-const DEFAULT_MAX = 10_000_000; // 10,000,000 UGX
 const STEP = 100_000; // 100,000 UGX
 
 const allColors = [
@@ -70,33 +70,47 @@ const ProductFilter: React.FC<ProductFilterProps> = ({
           min={MIN_PRICE}
           max={MAX_PRICE}
           onChange={(values) => setPriceRange([values[0], values[1]])}
-          renderTrack={({ props, children }) => (
-            <div
-              {...props}
-              className="w-full h-1 bg-gray-300 rounded-full mt-4"
-              style={{
-                background: `linear-gradient(to right, gray 0%, gray ${
-                  ((priceRange[0] - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100
-                }%, orange ${
-                  ((priceRange[0] - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100
-                }%, orange ${
-                  ((priceRange[1] - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100
-                }%, gray ${
-                  ((priceRange[1] - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100
-                }%, gray 100%)`,
-              }}
-            >
-              {children}
-            </div>
-          )}
-          renderThumb={({ props }) => (
-            <div
-              {...props}
-              className="w-4 h-4 bg-primary_1 rounded-full shadow outline-none"
-            >
-              <div className="w-3 h-3 bg-primary_1 rounded-full" />
-            </div>
-          )}
+          renderTrack={({ props, children }) => {
+            // Cast props to any to safely extract 'key'
+            const { key, style, ...restProps } = props as any;
+            return (
+              <div
+                {...restProps}
+                className="w-full h-1 bg-gray-300 rounded-full mt-4"
+                style={{
+                  ...style,
+                  background: `linear-gradient(to right, gray 0%, gray ${
+                    ((priceRange[0] - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) *
+                    100
+                  }%, orange ${
+                    ((priceRange[0] - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) *
+                    100
+                  }%, orange ${
+                    ((priceRange[1] - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) *
+                    100
+                  }%, gray ${
+                    ((priceRange[1] - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) *
+                    100
+                  }%, gray 100%)`,
+                }}
+              >
+                {children}
+              </div>
+            );
+          }}
+          renderThumb={({ props }) => {
+            // Cast props to any to safely extract 'key'
+            const { key, ...restProps } = props as any;
+            return (
+              <div
+                key={key}
+                {...restProps}
+                className="w-4 h-4 bg-primary_1 rounded-full shadow outline-none"
+              >
+                <div className="w-3 h-3 bg-primary_1 rounded-full" />
+              </div>
+            );
+          }}
         />
         <div className="flex justify-between text-sm text-gray-700 mt-2">
           <span>{formatPrice(priceRange[0])}</span>

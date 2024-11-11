@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { FaUser, FaLock } from 'react-icons/fa';
+import { FaLock, FaUser } from 'react-icons/fa';
 
 const AccountPage = () => {
   const [showPassword, setShowPassword] = useState(false);

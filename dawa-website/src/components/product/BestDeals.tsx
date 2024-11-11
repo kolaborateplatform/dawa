@@ -1,7 +1,8 @@
 'use client';
-import React from 'react';
-import StarRating from '../common/StarRating';
 import Image from 'next/image';
+import React from 'react';
+
+import StarRating from '../common/StarRating';
 
 // Define the structure of each product item
 interface Product {

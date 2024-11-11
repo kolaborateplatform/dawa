@@ -1,11 +1,11 @@
 'use client';
-import React, { useState, useCallback, useEffect } from 'react';
+import FireIcon from '@public/assets/svgs/fireIcon.svg';
 import Image from 'next/image';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import StarRating from '../common/StarRating';
+
 import Button from '../common/Button';
 import { Progress } from '../ui/progress';
-import FireIcon from '@public/assets/svgs/fireIcon.svg';
 
 interface Product {
   id: number;

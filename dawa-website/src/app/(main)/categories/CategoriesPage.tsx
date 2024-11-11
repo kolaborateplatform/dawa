@@ -1,18 +1,19 @@
 // CategoriesPage.tsx
 'use client';
+import React from 'react';
+import {
+  FaDesktop,
+  FaHeadphones,
+  FaLaptop,
+  FaTabletAlt,
+  FaWifi,
+} from 'react-icons/fa';
+
 import BestDealsCarousel from '@/components/carousels/BestDealsCarousel';
 import HotSalesCarousel from '@/components/carousels/HotSalesCarousel';
 import RecentlyViewedCarousel from '@/components/carousels/RecentlyViewedCarousel';
-import {
-  FaLaptop,
-  FaDesktop,
-  FaTabletAlt,
-  FaWifi,
-  FaHeadphones,
-} from 'react-icons/fa';
 import BannerSection from '@/components/category/BannerSection';
 import Sidebar from '@/components/category/Sidebar';
-import React from 'react';
 
 const CategoriesPage = () => {
   const subCategories = [

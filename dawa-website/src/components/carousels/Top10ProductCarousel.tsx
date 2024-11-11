@@ -1,8 +1,9 @@
 'use client';
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import StarRating from '../common/StarRating';
 import Image from 'next/image';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+
+import StarRating from '../common/StarRating';
 
 interface Product {
   id: number;

@@ -1,14 +1,14 @@
-import React from 'react';
+import Logo from '@public/assets/svgs/DAWA_VARIATION_04.svg';
 import Link from 'next/link';
+import React from 'react';
 import {
-  FaYoutube,
+  FaFacebook,
+  FaHeadset,
+  FaInstagram,
   FaLinkedin,
   FaTwitter,
-  FaFacebook,
-  FaInstagram,
-  FaHeadset,
+  FaYoutube,
 } from 'react-icons/fa';
-import Logo from '@public/assets/svgs/DAWA_VARIATION_04.svg';
 
 const Footer = () => {
   return (

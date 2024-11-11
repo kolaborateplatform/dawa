@@ -1,9 +1,11 @@
 import React, { ReactNode } from 'react';
+
 import TopBar from '@/components/layout/TopBar';
-import NavBar from './Navbar';
-import Footer from './Footer';
-import Newsletter from './NewsLetter';
+
 import ScrollToTopButton from '../common/ScrollToTopButton';
+import Footer from './Footer';
+import NavBar from './Navbar';
+import Newsletter from './NewsLetter';
 
 interface LayoutProps {
   children: ReactNode;

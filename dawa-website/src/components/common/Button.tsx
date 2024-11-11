@@ -1,6 +1,8 @@
-import { Button as ShadcnButton } from '../ui/button';
+import { FC, ReactNode } from 'react';
+
 import { cn } from '@/lib/utils';
-import { ReactNode, FC } from 'react';
+
+import { Button as ShadcnButton } from '../ui/button';
 
 type IconPosition = 'left' | 'right';
 

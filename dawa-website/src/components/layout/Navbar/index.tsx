@@ -1,13 +1,13 @@
 'use client';
 
+import Logo from '@public/assets/svgs/DAWA_VARIATION_04.svg';
+import FireIcon from '@public/assets/svgs/fireIcon.svg';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { FaSearch, FaHeart } from 'react-icons/fa';
+import { FaHeart, FaSearch } from 'react-icons/fa';
 import { FiGrid } from 'react-icons/fi';
 import { HiOutlineMenu } from 'react-icons/hi';
-import FireIcon from '@public/assets/svgs/fireIcon.svg';
-import Logo from '@public/assets/svgs/DAWA_VARIATION_04.svg';
-import Link from 'next/link';
-import Button from '../../common/Button';
+
 import {
   Sheet,
   SheetContent,
@@ -15,6 +15,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+
+import Button from '../../common/Button';
 
 const NavBar: React.FC = () => {
   const [isSticky, setIsSticky] = useState(false);

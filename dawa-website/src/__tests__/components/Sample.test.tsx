@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+
 import Sample from '@/components/common/Sample';
 
 describe('HelloWorld', () => {

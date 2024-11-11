@@ -1,6 +1,7 @@
-import React from 'react';
-import EnvelopIcons from '@public/assets/icons/envelops.svg';
 import CircleElements from '@public/assets/icons/circleElement.svg';
+import EnvelopIcons from '@public/assets/icons/envelops.svg';
+import React from 'react';
+
 import Button from '../../common/Button';
 
 const Newsletter = ({ container = false }: { container?: boolean }) => {

@@ -1,11 +1,11 @@
-// pages/category/CategoryPage.tsx
 'use client';
 import React, { useState } from 'react';
-import CardLayout from '@/components/product/CardLayout';
-import Sidebar from '@/components/category/Sidebar';
-import BannerSection from '@/components/category/BannerSection';
-import ProductFilter from '@/components/product/ProductFilter';
 import { FaTh, FaThList } from 'react-icons/fa';
+
+import BannerSection from '@/components/category/BannerSection';
+import Sidebar from '@/components/category/Sidebar';
+import CardLayout from '@/components/product/CardLayout';
+import ProductFilter from '@/components/product/ProductFilter';
 
 interface CategoryPageProps {
   category: string;
@@ -29,8 +29,8 @@ const productsData: Product[] = [
   {
     id: 1,
     name: 'MacBook Pro 2020 With 260 SSD',
-    price: 1480000, // 1,480,000 UGX
-    originalPrice: 3200000, // 3,200,000 UGX
+    price: 1480000,
+    originalPrice: 3200000,
     rating: 4.5,
     reviews: 12,
     imageUrl:
@@ -48,8 +48,8 @@ const productsData: Product[] = [
   {
     id: 2,
     name: 'Dell XPS 15 Ultra',
-    price: 500000000, // 500,000,000 UGX
-    originalPrice: 600000000, // 600,000,000 UGX
+    price: 500000000,
+    originalPrice: 600000000,
     rating: 4.8,
     reviews: 25,
     imageUrl:
@@ -67,8 +67,8 @@ const productsData: Product[] = [
   {
     id: 3,
     name: 'Asus ZenBook 14',
-    price: 75000, // 75,000 UGX
-    originalPrice: 100000, // 100,000 UGX
+    price: 75000,
+    originalPrice: 100000,
     rating: 4.2,
     reviews: 8,
     imageUrl:
@@ -81,8 +81,8 @@ const productsData: Product[] = [
   {
     id: 4,
     name: 'Budget Laptop 2023',
-    price: 5000, // 5,000 UGX
-    originalPrice: 8000, // 8,000 UGX
+    price: 5000,
+    originalPrice: 8000,
     rating: 3.8,
     reviews: 5,
     imageUrl:
@@ -100,8 +100,8 @@ const productsData: Product[] = [
   {
     id: 5,
     name: 'Elite Laptop Pro Max',
-    price: 100_000_000, // 100,000,000 UGX
-    originalPrice: 150_000_000, // 150,000,000 UGX
+    price: 100_000_000,
+    originalPrice: 150_000_000,
     rating: 5.0,
     reviews: 50,
     imageUrl:
@@ -129,7 +129,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
   const [filteredProducts, setFilteredProducts] =
     useState<Product[]>(productsData);
   const [priceRange, setPriceRange] = useState<[number, number]>([
-    500_000, 10_000_000,
+    20_000_000, 80_000_000,
   ]); // Default range: 500k to 10m
   const [location, setLocation] = useState<string>('');
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
@@ -141,7 +141,6 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
 
   const handleViewMore = (productId: number) => {
     console.log(`View more details for product ID: ${productId}`);
-    // Implement navigation or modal to show product details
   };
 
   // Function to apply filters
@@ -195,7 +194,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
   const resetFilters = () => {
     setLocation('');
     setSelectedColors([]);
-    setPriceRange([500_000, 10_000_000]); // Reset to default range
+    setPriceRange([500_000, 10_000_000]);
     setFilteredProducts(productsData);
     setFilterOption('default');
   };

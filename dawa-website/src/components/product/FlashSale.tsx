@@ -1,8 +1,9 @@
 'use client';
-import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
-import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { Progress } from '@/components/ui/progress';
 
 // Reusable useWindowSize Hook
 const useWindowSize = () => {
@@ -111,7 +112,7 @@ const FlashSale: React.FC = () => {
         clearInterval(autoScrollRef.current);
       }
     };
-  }, [products.length]);
+  }, []);
 
   // Calculate translation based on the current index
   const translateX = -currentIndex * (CARD_WIDTH + CARD_MARGIN);

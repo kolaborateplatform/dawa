@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
+import Gadgets from '@public/assets/images/gadgets.png';
 import Perfumes from '@public/assets/images/perfums.png';
 import Shoe from '@public/assets/images/shoe.png';
-import Gadgets from '@public/assets/images/gadgets.png';
+import Image from 'next/image';
+import React, { useEffect, useRef, useState } from 'react';
 
 const slides: any[] = [
   {

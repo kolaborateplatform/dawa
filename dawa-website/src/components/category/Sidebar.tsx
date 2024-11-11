@@ -1,69 +1,68 @@
-// Sidebar.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface SidebarProps {
   height?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ height = '500px' }) => {
-  const categories = [
-    {
-      name: 'Laptop & Computer',
-      count: 45,
-      subcategories: ['Hardware', 'Memory', 'Storage', 'Software'],
-    },
-    {
-      name: 'Smartphone',
-      count: 21,
-      subcategories: ['Android', 'iOS'],
-    },
-    {
-      name: 'TV',
-      count: 32,
-      subcategories: ['Smart TV', 'LED', 'OLED', 'QLED'],
-    },
-    {
-      name: 'Wireless Hardware',
-      count: 129,
-      subcategories: ['Routers', 'Wi-Fi Extenders', 'Modems'],
-    },
-    {
-      name: 'Virtual Reality',
-      count: 29,
-      subcategories: ['Headsets', 'Accessories'],
-    },
-    {
-      name: 'Ultrabook',
-      count: 44,
-    },
-    {
-      name: 'Desktop PC’s',
-      count: 34,
-    },
-    {
-      name: 'Speaker',
-      count: 49,
-      subcategories: ['Bluetooth', 'Wired'],
-    },
-    {
-      name: 'Routers',
-      count: 129,
-    },
-    {
-      name: 'PC Components',
-      count: 129,
-      subcategories: ['Processors', 'Graphics Cards', 'RAM', 'Storage'],
-    },
-  ];
+// Define categories outside the component to ensure stable reference
+const categories = [
+  {
+    name: 'Laptop & Computer',
+    count: 45,
+    subcategories: ['Hardware', 'Memory', 'Storage', 'Software'],
+  },
+  {
+    name: 'Smartphone',
+    count: 21,
+    subcategories: ['Android', 'iOS'],
+  },
+  {
+    name: 'TV',
+    count: 32,
+    subcategories: ['Smart TV', 'LED', 'OLED', 'QLED'],
+  },
+  {
+    name: 'Wireless Hardware',
+    count: 129,
+    subcategories: ['Routers', 'Wi-Fi Extenders', 'Modems'],
+  },
+  {
+    name: 'Virtual Reality',
+    count: 29,
+    subcategories: ['Headsets', 'Accessories'],
+  },
+  {
+    name: 'Ultrabook',
+    count: 44,
+  },
+  {
+    name: 'Desktop PC’s',
+    count: 34,
+  },
+  {
+    name: 'Speaker',
+    count: 49,
+    subcategories: ['Bluetooth', 'Wired'],
+  },
+  {
+    name: 'Routers',
+    count: 129,
+  },
+  {
+    name: 'PC Components',
+    count: 129,
+    subcategories: ['Processors', 'Graphics Cards', 'RAM', 'Storage'],
+  },
+];
 
+const Sidebar: React.FC<SidebarProps> = ({ height = '500px' }) => {
   const [openCategory, setOpenCategory] = useState<string>(categories[0].name);
   const [activeCategory, setActiveCategory] = useState<string>(
     categories[0].name,
   );
 
   useEffect(() => {
-    // Open the first category by default
     setOpenCategory(categories[0].name);
   }, []);
 
@@ -83,15 +82,23 @@ const Sidebar: React.FC<SidebarProps> = ({ height = '500px' }) => {
     >
       <h2 className="font-semibold text-lg mb-4">Show all categories</h2>
       <ul className="space-y-4">
-        {categories.map((category, index) => (
-          <li key={index} className="flex flex-col">
+        {categories.map((category) => (
+          <li key={category.name} className="flex flex-col">
             <div
+              role="button"
+              tabIndex={0}
+              onClick={() => toggleCategory(category.name)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  toggleCategory(category.name);
+                }
+              }}
               className={`flex items-center justify-between font-semibold cursor-pointer transition-colors duration-200 ${
                 activeCategory === category.name
                   ? 'text-primary_1'
                   : 'text-gray-900'
               }`}
-              onClick={() => toggleCategory(category.name)}
+              aria-expanded={openCategory === category.name}
             >
               <span className="flex items-center">
                 {category.name}
@@ -102,9 +109,9 @@ const Sidebar: React.FC<SidebarProps> = ({ height = '500px' }) => {
             </div>
             {category.subcategories && openCategory === category.name && (
               <ul className="ml-4 mt-2 space-y-1 text-sm text-gray-600">
-                {category.subcategories.map((sub, subIndex) => (
+                {category.subcategories.map((sub) => (
                   <li
-                    key={subIndex}
+                    key={sub}
                     className="hover:text-gray-800 transition-colors duration-200 cursor-pointer"
                   >
                     {sub}

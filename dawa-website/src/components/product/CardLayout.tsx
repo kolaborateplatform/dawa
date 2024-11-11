@@ -1,9 +1,10 @@
 'use client';
-import React from 'react';
-import { AiOutlineHeart, AiOutlineCheck } from 'react-icons/ai';
 import Image from 'next/image';
-import StarRating from '@/components/common/StarRating';
+import React from 'react';
+import { AiOutlineCheck, AiOutlineHeart } from 'react-icons/ai';
+
 import Button from '@/components/common/Button';
+import StarRating from '@/components/common/StarRating';
 
 interface Product {
   id: number;

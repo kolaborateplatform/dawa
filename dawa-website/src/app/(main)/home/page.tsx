@@ -1,6 +1,8 @@
 import React from 'react';
-import HomePage from './HomePage';
+
 import Layout from '@/components/layout';
+
+import HomePage from './HomePage';
 
 const page = () => {
   return (

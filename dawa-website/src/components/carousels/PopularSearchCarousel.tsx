@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 interface Product {
