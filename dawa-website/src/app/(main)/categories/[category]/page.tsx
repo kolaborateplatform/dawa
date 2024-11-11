@@ -1,5 +1,5 @@
 import React from 'react';
-import CategoryPageComponent from './CategoryPage';
+import CategoryPage from './CategoryPage';
 
 interface PageProps {
   params: { category: string };
@@ -10,7 +10,7 @@ const Page: React.FC<PageProps> = async ({ params }) => {
 
   return (
     <div>
-      <CategoryPageComponent category={category} />
+      <CategoryPage category={category} />
     </div>
   );
 };

@@ -7,6 +7,10 @@ import BannerSection from '@/components/category/BannerSection';
 import ProductFilter from '@/components/product/ProductFilter';
 import { FaTh, FaThList } from 'react-icons/fa';
 
+interface CategoryPageProps {
+  category: string;
+}
+
 interface Product {
   id: number;
   name: string;
@@ -117,7 +121,7 @@ const productsData: Product[] = [
   // Add more products as needed, ensuring some have prices <10,000 and >500 million UGX
 ];
 
-const CategoryPage: React.FC = () => {
+const CategoryPage: React.FC<CategoryPageProps> = ({ category }) => {
   const [viewType, setViewType] = useState<'grid' | 'list'>('grid');
   const [filterOption, setFilterOption] = useState<
     'default' | 'rating' | 'price_low_to_high' | 'price_high_to_low'
